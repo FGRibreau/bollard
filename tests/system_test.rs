@@ -131,6 +131,7 @@ async fn events_until_forever_test(docker: Docker) -> Result<(), Error> {
 
     Ok(())
 }
+
 async fn df_test(docker: Docker) -> Result<(), Error> {
     create_image_hello_world(&docker).await?;
 
@@ -149,6 +150,14 @@ async fn df_test(docker: Docker) -> Result<(), Error> {
     Ok(())
 }
 
+async fn info_test(docker: Docker) -> Result<(), Error> {
+
+    let res = &docker.info().await?;
+    assert_eq!("linux", res.os_type.as_ref().unwrap());
+
+    Ok(())
+}
+
 #[test]
 fn integration_test_events() {
     connect_to_docker_and_run!(events_test);
@@ -163,4 +172,9 @@ fn integration_test_events_until_forever() {
 #[test]
 fn integration_test_df() {
     connect_to_docker_and_run!(df_test);
+}
+
+#[test]
+fn integration_test_info() {
+    connect_to_docker_and_run!(info_test);
 }
